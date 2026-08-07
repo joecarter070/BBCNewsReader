@@ -1,5 +1,5 @@
 # BBC News Reader App
-A simple Android app that loads BBC news headlines from an RSS feed and lets users read details, save favourites, and browse help/about information. Built for the final Android assignment.
+A simple Android app that loads BBC news headlines from an RSS feed and lets users read details, save favourites, and browse help/about information. Built for the final CST2335 project.
 
 ---
 
