@@ -8,6 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+/**
+ * This class handles all the database work for the app.
+ * It creates the favourites table, and provides simple functions
+ * to add, load, and delete saved articles. This is where
+ * the app stores anything the user marks as a favourite.
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "bbcnews.db";
     public static final int DATABASE_VERSION = 1;

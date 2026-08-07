@@ -10,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+/**
+ * This Activity displays the help screen for the app.
+ * It mainly shows the help layout and the help menu button opens a small dialog with instructions.
+ * Basically this is just where users can read how to use the app.
+ */
 public class HelpActivity extends AppCompatActivity {
 
     @Override

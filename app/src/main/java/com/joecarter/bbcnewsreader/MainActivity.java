@@ -38,6 +38,15 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
+/**
+ * MainActivity is basically the “home screen” of the app.
+ * It loads the BBC RSS feed, shows the headlines in a ListView,
+ * lets the user search through them, and opens the details page
+ * when you click on an article. It also has the navigation drawer
+ * and saves the last search using SharedPreferences.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
@@ -54,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
+        // Set up toolbar + version number
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.bbc_news_reader));
+        getSupportActionBar().setTitle(getString(R.string.bbc_news_reader) + " v1.0");
 
+        // Navigation drawer setup
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -90,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         headlines.add(getString(R.string.loading_headlines));
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, headlines);
         listView.setAdapter(adapter);
-
+        // Clicking a headline opens the details page
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Article selected = articles.get(position);
 
@@ -106,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         EditText editSearch = findViewById(R.id.editSearch);
 
-
+        // SharedPreferences for saving search text
         String savedText = prefs.getString("lastSearch", "");
         editSearch.setText(savedText);
 
@@ -126,12 +136,118 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        // Required Toast
         Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-        downloadRSS();
+        //downloadRSS();
+        new RSSAsyncTask().execute();
 
     }
+    /**
+     * RSSAsyncTask downloads the BBC RSS feed in the background.
+     * It parses the XML and builds a list of Article objects.
+     * When it's done, it updates the ListView on the main thread.
+     */
+    private class RSSAsyncTask extends android.os.AsyncTask<Void, Void, ArrayList<Article>> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+
+
+        @Override
+        protected ArrayList<Article> doInBackground(Void... voids) {
+
+            ArrayList<Article> tempArticles = new ArrayList<>();
+            Article currentArticle = null;
+            String text = "";
+
+            try {
+                // Using HTTPS because BBC did not let http traffic go through
+                URL url = new URL("https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+
+                XmlPullParser parser = Xml.newPullParser();
+                parser.setInput(stream, null);
+
+                int eventType = parser.getEventType();
+                //RSS Parsing loop
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+
+                    if (eventType == XmlPullParser.START_TAG) {
+                        String tagName = parser.getName();
+
+                        if (tagName.equals("item")) {
+                            currentArticle = new Article();
+                        }
+
+                    } else if (eventType == XmlPullParser.TEXT) {
+                        text = parser.getText();
+
+                    } else if (eventType == XmlPullParser.END_TAG) {
+                        String tagName = parser.getName();
+
+                        if (currentArticle != null) {
+
+                            switch (tagName) {
+                                case "title":
+                                    currentArticle.title = text;
+                                    break;
+
+                                case "description":
+                                    currentArticle.description = text;
+                                    break;
+
+                                case "link":
+                                    currentArticle.link = text;
+                                    break;
+
+                                case "pubDate":
+                                    currentArticle.pubDate = text;
+                                    break;
+                            }
+
+                            if (tagName.equals("item")) {
+                                tempArticles.add(currentArticle);
+                                currentArticle = null;
+                            }
+                        }
+                    }
+
+                    eventType = parser.next();
+                }
+
+            } catch (Exception e) {
+                Article errorArticle = new Article();
+                errorArticle.title = getString(R.string.error_loading) + e.getMessage();
+                tempArticles.add(errorArticle);
+            }
+
+            return tempArticles;
+        }
+
+
+        @Override
+        protected void onPostExecute(ArrayList<Article> result) {
+            super.onPostExecute(result);
+
+            articles.clear();
+            articles.addAll(result);
+
+            headlines.clear();
+            for (Article a : articles) {
+                headlines.add(a.title);
+            }
+
+            adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+    /*
     private void downloadRSS(){
         progressBar.setVisibility(View.VISIBLE);
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -210,6 +326,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_help, menu);

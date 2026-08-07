@@ -18,6 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
+/**
+ * This Activity shows the full details of whatever article the user clicked.
+ * Basically it displays the title, description, and date, and lets the user
+ * either open the article in a browser or save it to favourites.
+ * It's essentially the "details page" of the app.
+ */
 public class DetailsActivity extends AppCompatActivity {
     TextView textTitle, textDescription, textDate;
     Button buttonOpenBrowser, buttonSaveFavourite;
@@ -47,10 +53,13 @@ public class DetailsActivity extends AppCompatActivity {
         textDescription.setText(description);
         textDate.setText(pubDate);
 
+        // Opens the article in the user's browser
         buttonOpenBrowser.setOnClickListener(v -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
             startActivity(browserIntent);
         });
+
+        // Saves the article to the favourites database
         buttonSaveFavourite.setOnClickListener(v -> {
             db.insertFavourite(title, description, link, pubDate);
             Snackbar.make(buttonSaveFavourite, getString(R.string.saved), Snackbar.LENGTH_LONG).show();
@@ -63,6 +72,7 @@ public class DetailsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_help, menu);
         return true;
     }
+    //help dialog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_help) {

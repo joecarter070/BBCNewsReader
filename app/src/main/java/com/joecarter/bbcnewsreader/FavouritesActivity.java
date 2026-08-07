@@ -15,8 +15,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+/**
+ * This Activity shows all the articles the user saved as favourites.
+ * It loads them from the database, displays the titles in a ListView,
+ * and lets the user click to open the full details again.
+ * Long‑pressing an item deletes it from the database and updates the list.
+ */
 public class FavouritesActivity extends AppCompatActivity {
     ListView listView;
     ArrayList<Article> favourites = new ArrayList<>();
@@ -32,14 +39,18 @@ public class FavouritesActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewFavourites);
         db = new DatabaseHelper(this);
+
+        // Load favourites from the database
         favourites = db.getAllFavourites();
 
+        // Extract just the titles for the ListView
         titles.clear();
         for (Article a : favourites){
             titles.add(a.title);
         }
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(adapter);
+        // Clicking a favourite opens the details page again
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Article selected = favourites.get(position);
 
@@ -51,6 +62,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+        // Long‑press deletes the favourite
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             Article selected = favourites.get(position);
 
@@ -59,8 +71,11 @@ public class FavouritesActivity extends AppCompatActivity {
             favourites.remove(position);
             titles.remove(position);
             adapter.notifyDataSetChanged();
+            // Required Snackbar
+            Snackbar.make(findViewById(android.R.id.content),
+                    getString(R.string.article_removed),
+                    Snackbar.LENGTH_LONG).show();
 
-            Toast.makeText(this, getString(R.string.article_removed), Toast.LENGTH_SHORT).show();
             return true;
         });
 

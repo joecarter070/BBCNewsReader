@@ -10,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+/**
+ * This Activity is essentially just a container for the AboutFragment.
+ * it just loads the FRAGMENT into the screen.
+ * The fragment shows the "About" info for the app.
+ */
 public class AboutActivity extends AppCompatActivity {
 
     @Override
@@ -18,6 +22,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_about);
+        // Load the AboutFragment into the layout
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, new AboutFragment())

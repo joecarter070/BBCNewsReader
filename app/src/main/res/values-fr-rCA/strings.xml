@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LecteurBBCNouvelles</string>
+
+    <string name="bbc_news_reader">Lecteur de nouvelles BBC</string>
+
+    <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
+    <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+
+    <string name="help">Aide</string>
+
+    <string name="hello_blank_fragment">Bonjour fragment vide</string>
+
+    <string name="home">Accueil</string>
+    <string name="favourites">Favoris</string>
+    <string name="about">À propos</string>
+
+    <string name="about_fragment">Ceci est le fragment À propos</string>
+
+    <string name="search_hint">Rechercher des manchettes</string>
+
+    <string name="how_to">Comment utiliser le lecteur de nouvelles BBC</string>
+
+    <string name="instructions">
+        • Touchez une manchette pour voir les détails complets.\n\n
+        • Appuyez sur « Ouvrir dans le navigateur » pour lire l’article complet.\n\n
+        • Appuyez sur « Ajouter aux favoris » pour enregistrer un article.\n\n
+        • Ouvrez le menu de navigation pour accéder à vos favoris enregistrés.\n\n
+        • Appuyez longuement sur un favori pour le supprimer.
+    </string>
+
+    <string name="open_button">Ouvrir dans le navigateur</string>
+    <string name="save_button">Ajouter aux favoris</string>
+
+    <string name="about_text1">À propos du lecteur de nouvelles BBC</string>
+
+    <string name="about_text2">
+        Développé par Joe Carter\n\n
+        Cette application récupère les manchettes RSS en direct de la BBC,
+        affiche les détails complets des articles et permet d’enregistrer des favoris
+        pour les lire plus tard.
+    </string>
+
+    <string name="loading_headlines">Chargement des manchettes…</string>
+
+    <string name="hello">bonjour</string>
+
+    <string name="help_help">Instructions pour cet écran.</string>
+
+    <string name="article_removed">Article supprimé des favoris</string>
+
+    <string name="saved">Enregistré dans les favoris</string>
+
+    <string name="ok">OK</string>
+
+    <string name="error_loading">Erreur lors du chargement du RSS : </string>
+</resources>
