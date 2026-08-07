@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">BBCNewsReader</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="bbc_news_reader">BBC News Reader</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="help">Help</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="favourites">Favourites</string>
+    <string name="about">About</string>
+    <string name="about_fragment">This is the About Fragment</string>
+    <string name="search_hint">Search headlines</string>
+    <string name="how_to">How to Use BBC News Reader</string>
+    <string name="instructions">• Tap any headline to view full details.\n\n
+        • Press \'Open in Browser\' to read the full article.\n\n
+        • Press \'Save to Favourites\' to store an article.\n\n
+        • Open the navigation drawer to access your saved favourites.\n\n
+        • Long‑press a favourite to delete it.</string>
+    <string name="open_button">Open in Browser</string>
+    <string name="save_button">Save to Favourites</string>
+    <string name="about_text1">About BBC News Reader</string>
+    <string name="about_text2">Developed by Joe Carter\n\n
+        This app retrieves live BBC RSS news headlines, displays full article details,
+        and allows saving favourites for later reading.</string>
+    <string name="loading_headlines"> Loading headlines..</string>
+    <string name="hello">hello</string>
+    <string name="help_help">Instructions for this screen.</string>
+    <string name="article_removed">Article removed from Favourites</string>
+    <string name="saved">Saved to favourites</string>
+    <string name="ok">OK</string>
+    <string name="error_loading">Error loading RSS: </string>
+
 </resources>

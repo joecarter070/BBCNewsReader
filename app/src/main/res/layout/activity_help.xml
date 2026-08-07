@@ -10,14 +10,14 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="How to Use BBC News Reader"
+            android:text="@string/how_to"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="• Tap any headline to view full details.\n\n• Press 'Open in Browser' to read the full article.\n\n• Press 'Save to Favourites' to store an article.\n\n• Open the navigation drawer to access your saved favourites.\n\n• Long‑press a favourite to delete it."
+            android:text="@string/instructions"
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

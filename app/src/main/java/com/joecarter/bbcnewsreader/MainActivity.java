@@ -1,18 +1,25 @@
 package com.joecarter.bbcnewsreader;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Xml;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
@@ -38,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> headlines = new ArrayList<>();
     ArrayAdapter<String> adapter;
     ArrayList<Article> articles = new ArrayList<>();
+    SharedPreferences prefs;
+
 
 
     @Override
@@ -48,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("BBC News Reader");
+        getSupportActionBar().setTitle(getString(R.string.bbc_news_reader));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -78,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
         listView = findViewById(R.id.listViewHeadlines);
         progressBar = findViewById(R.id.progressBar);
-        headlines.add("Loading headlines..");
+        headlines.add(getString(R.string.loading_headlines));
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, headlines);
         listView.setAdapter(adapter);
 
@@ -93,19 +102,43 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+        prefs = getSharedPreferences("BBCPrefs", MODE_PRIVATE);
+
+        EditText editSearch = findViewById(R.id.editSearch);
+
+
+        String savedText = prefs.getString("lastSearch", "");
+        editSearch.setText(savedText);
+
+
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                prefs.edit().putString("lastSearch", s.toString()).apply();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s);
+            }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        });
+
 
 
         Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
         downloadRSS();
 
     }
+
     private void downloadRSS(){
         progressBar.setVisibility(View.VISIBLE);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() ->{
-            ArrayList<String> tempArticles = new ArrayList<>();
+            ArrayList<Article> tempArticles = new ArrayList<>();
             Article currentArticle = null;
             String currentTag = "";
             try{
@@ -158,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (Exception e){
                 Article errorArticle = new Article();
-                errorArticle.title = "Error loading RSS: " + e.getMessage();
+                errorArticle.title = getString(R.string.error_loading) + e.getMessage();
                 tempArticles.add(errorArticle);
 
             }
@@ -177,4 +210,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_help, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.help))
+                    .setMessage(getString(R.string.help_help))
+                    .setPositiveButton(getString(R.string.ok), null)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

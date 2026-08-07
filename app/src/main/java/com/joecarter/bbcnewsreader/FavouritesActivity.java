@@ -2,11 +2,14 @@ package com.joecarter.bbcnewsreader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -57,9 +60,26 @@ public class FavouritesActivity extends AppCompatActivity {
             titles.remove(position);
             adapter.notifyDataSetChanged();
 
-            Toast.makeText(this, "Article removed from Favourites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.article_removed), Toast.LENGTH_SHORT).show();
             return true;
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_help, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.help))
+                    .setMessage(getString(R.string.help_help))
+                    .setPositiveButton(getString(R.string.ok), null)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
